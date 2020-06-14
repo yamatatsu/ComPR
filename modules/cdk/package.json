@@ -1,0 +1,33 @@
+{
+  "name": "ghanymede-cdk",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "synth": "cdk synth",
+    "copyLayer": "rm -rf layer && mkdir -p layer/nodejs && cp -r ../lambda/node_modules ./layer/nodejs/node_modules",
+    "predeploy": "yarn copyLayer",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff"
+  },
+  "dependencies": {
+    "@aws-cdk/assert": "^1.45.0",
+    "@aws-cdk/aws-apigatewayv2": "^1.45.0",
+    "@aws-cdk/aws-certificatemanager": "^1.45.0",
+    "@aws-cdk/aws-cloudfront": "^1.45.0",
+    "@aws-cdk/aws-cognito": "^1.45.0",
+    "@aws-cdk/aws-iam": "^1.45.0",
+    "@aws-cdk/aws-lambda": "^1.45.0",
+    "@aws-cdk/aws-route53": "^1.45.0",
+    "@aws-cdk/aws-route53-targets": "^1.45.0",
+    "@aws-cdk/aws-s3": "^1.45.0",
+    "@aws-cdk/aws-wafv2": "^1.45.0",
+    "@aws-cdk/core": "^1.45.0",
+    "aws-cdk": "^1.45.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.13",
+    "dotenv-cli": "^3.1.0",
+    "ts-node": "^8.10.2"
+  }
+}

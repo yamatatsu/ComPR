@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -eux
+
+aws s3 sync --delete ./dist s3://${BUCKET_NAME} --profile ${PROFILE_NAME}
