@@ -1,0 +1,4 @@
+projects:
+  app:
+    schemaPath: modules/front/schema/github.graphqlsrc/schema.graphql
+    includes: ["**/*.graphql"]

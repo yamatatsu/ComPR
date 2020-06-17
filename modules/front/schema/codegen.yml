@@ -1,0 +1,10 @@
+overwrite: true
+schema: schema/github.graphql # relative path from package.json
+documents: null
+generates:
+  schema/index.d.ts: # relative path from package.json
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      typesPrefix: GQL

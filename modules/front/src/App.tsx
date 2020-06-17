@@ -1,56 +1,58 @@
-import React from "react"
+import React, { useState } from "react"
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom"
-import { getConstants } from "./constants"
+import ApolloClient from "apollo-boost"
+import { ApolloProvider } from "@apollo/react-hooks"
 
-const { redirect_uri, client_id, api_origin } = getConstants()
+import { LandingPage } from "./components/LandingPage"
+import { GithubLogin } from "./components/GithubLogin"
+import { GithubCallback } from "./components/GithubCallback"
+import { RepoList } from "./components/RepoList"
+import { Explorer } from "./components/Explorer"
+import { NotFound } from "./components/NotFound"
 
 export function App() {
   // const MonacoEditor = React.lazy(() => import("./MonacoEditor"))
 
+  const [token, setToken] = useState<string | null>(
+    process.env.token_for_debug ?? null,
+  )
+
+  if (!token) {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/login" component={GithubLogin} />
+          <Route exact path="/login/callback">
+            <GithubCallback setToken={setToken} />
+          </Route>
+          <Route exact path="/not-found" component={NotFound} />
+          <Redirect from="*" to="/not-found" />
+        </Switch>
+      </BrowserRouter>
+    )
+  }
+
+  console.log(token)
+
+  const client = new ApolloClient({
+    uri: "https://api.github.com/graphql",
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  })
+
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={() => <div>Repo List</div>} />
-        <Route
-          exact
-          path="/login"
-          component={() => {
-            const params = new URLSearchParams({
-              // scope: "user:email,read:org,repo:status,write:repo_hook,repo",
-              scope: "",
-              client_id,
-              redirect_uri,
-              // state: stateString,
-            })
-            location.assign(
-              `https://github.com/login/oauth/authorize?${params.toString()}`,
-            )
-            return <div>Redirect to Github...</div>
-          }}
-        />
-        <Route
-          exact
-          path="/login/callback"
-          component={() => {
-            const urlSearchParams = new URLSearchParams(location.search)
-            const code = urlSearchParams.get("code")
-            fetch(`${api_origin}/auth/token`, {
-              method: "post",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ code }),
-            })
-              .then((result) => result.json())
-              .then((json) => console.log("json: %o", json))
-            return <div>Auth Loading...</div>
-          }}
-        />
-        <Route
-          path="/:owener/:repo/:branch"
-          component={() => <div>Explorer</div>}
-        />
-        <Route exact path="/not-found" component={() => <div>Not Found</div>} />
-        <Redirect from="*" to="/not-found" />
-      </Switch>
-    </BrowserRouter>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={RepoList} />
+          <Redirect from="/login/callback" to="/" />
+          <Route path="/:owener/:repo/:branch" component={Explorer} />
+          <Route exact path="/not-found" component={NotFound} />
+          <Redirect from="*" to="/not-found" />
+        </Switch>
+      </BrowserRouter>
+    </ApolloProvider>
   )
 }
