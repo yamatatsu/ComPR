@@ -5,10 +5,22 @@ type Props = {
   loading: boolean
   error: Error | undefined
   entities: GQLTreeEntry[] | undefined
+  currentPath: string
+  parentPath: string
+  isRepositoryRoot: boolean
+  handleClickObject: (path: string) => void
 }
 
 export const Explorer: FunctionComponent<Props> = (props) => {
-  const { loading, error, entities } = props
+  const {
+    loading,
+    error,
+    entities,
+    currentPath,
+    parentPath,
+    isRepositoryRoot,
+    handleClickObject,
+  } = props
 
   if (loading) {
     return <div>loading...</div>
@@ -25,11 +37,21 @@ export const Explorer: FunctionComponent<Props> = (props) => {
   return (
     <>
       <ul>
+        {!isRepositoryRoot && (
+          <li>
+            ../<button onClick={() => handleClickObject(parentPath)}>go</button>
+          </li>
+        )}
         {entities.map((entity) => {
           const { type, name } = entity
           return (
             <li>
               [{type}]{name}
+              <button
+                onClick={() => handleClickObject(`${currentPath}/${name}`)}
+              >
+                go
+              </button>
             </li>
           )
         })}

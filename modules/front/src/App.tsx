@@ -1,5 +1,12 @@
 import React, { useState } from "react"
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom"
+import {
+  BrowserRouter,
+  Route,
+  Redirect,
+  Switch,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom"
 import ApolloClient from "apollo-boost"
 import { ApolloProvider } from "@apollo/react-hooks"
 
@@ -48,7 +55,13 @@ export function App() {
         <Switch>
           <Route exact path="/" component={RepoList} />
           <Redirect from="/login/callback" to="/" />
-          <Route path="/:owener/:repo/:branch" component={Explorer} />
+          <Route
+            path="/:owner/:repo/:branch"
+            component={() => {
+              const { owner, repo, branch } = useParams()
+              return <Explorer owner={owner} repo={repo} branch={branch} />
+            }}
+          />
           <Route exact path="/not-found" component={NotFound} />
           <Redirect from="*" to="/not-found" />
         </Switch>

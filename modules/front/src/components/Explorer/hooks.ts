@@ -1,14 +1,17 @@
 import { useQuery } from "@apollo/react-hooks"
 import { gql } from "apollo-boost"
-import { GQLQuery, GQLTree, GQLTreeEntry } from "../../../schema"
+import { GQLQuery, GQLTree } from "../../../schema"
 
-type Variables = {
+type Params = {
   owner: string
   name: string
   expression: string
 }
 
-export const useRepoEntities = (variables: Variables) => {
+export const useRepoEntities = (params: Params) => {
+  const { owner, name, expression } = params
+
+  const variables = { owner, name, expression }
   const { loading, error, data } = useQuery<GQLQuery>(
     gql`
       query getRepoEntities(
