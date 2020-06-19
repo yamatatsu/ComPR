@@ -4,12 +4,15 @@ import {
   Route,
   Redirect,
   Switch,
-  useRouteMatch,
   useParams,
 } from "react-router-dom"
-import ApolloClient from "apollo-boost"
+import ApolloClient, {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from "apollo-boost"
 import { ApolloProvider } from "@apollo/react-hooks"
 
+import introspectionQueryResultData from "../schema/fragmentTypes.json"
 import { LandingPage } from "./components/LandingPage"
 import { GithubLogin } from "./components/GithubLogin"
 import { GithubCallback } from "./components/GithubCallback"
@@ -43,6 +46,11 @@ export function App() {
   console.log(token)
 
   const client = new ApolloClient({
+    cache: new InMemoryCache({
+      fragmentMatcher: new IntrospectionFragmentMatcher({
+        introspectionQueryResultData,
+      }),
+    }),
     uri: "https://api.github.com/graphql",
     headers: {
       authorization: `Bearer ${token}`,

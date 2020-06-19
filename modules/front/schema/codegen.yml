@@ -8,3 +8,6 @@ generates:
       - "typescript-resolvers"
     config:
       typesPrefix: GQL
+  schema/fragmentTypes.json:
+    plugins:
+      - fragment-matcher

@@ -1,18 +1,22 @@
 import { useQuery } from "@apollo/react-hooks"
 import { gql } from "apollo-boost"
-import { GQLQuery, GQLTree } from "../../../schema"
+import { GQLQuery, GQLTree, GQLBlob, GQLTreeEntry } from "../../../schema"
 
 type Params = {
   owner: string
   name: string
   expression: string
 }
+type Result =
+  | { type: "Loading"; loading: true }
+  | { type: "Tree"; entities: GQLTreeEntry[] }
+  | { type: "Blob"; text: string }
 
-export const useRepoEntities = (params: Params) => {
+export const useRepoEntities = (params: Params): Result => {
   const { owner, name, expression } = params
 
   const variables = { owner, name, expression }
-  const { loading, error, data } = useQuery<GQLQuery>(
+  const result = useQuery<GQLQuery>(
     gql`
       query getRepoEntities(
         $owner: String!
@@ -27,31 +31,44 @@ export const useRepoEntities = (params: Params) => {
                 type
               }
             }
+            ... on Blob {
+              text
+            }
           }
         }
       }
     `,
     { variables },
   )
+  console.log("%o", result)
+  const { loading, error, data } = result
   if (loading) {
-    return { loading, error, repos: [] }
+    return { type: "Loading", loading }
   }
 
   if (error) {
-    return { loading, error, repos: [] }
+    throw error
   }
 
   if (!data) {
     throw new Error("No data is fetched")
   }
 
-  const tree: GQLTree | null | undefined = data.repository?.object
+  const object = data.repository?.object
 
-  if (!tree) {
+  if (!object) {
     throw new Error("No data is fetched")
   }
-  const entities =
-    tree.entries?.sort((a, b) => (a.type > b.type ? -1 : 1)) ?? []
+  const tree: GQLTree = object
+  const entities = tree.entries?.sort((a, b) => (a.type > b.type ? -1 : 1))
+  if (entities) {
+    return { type: "Tree", entities }
+  }
 
-  return { loading, error, entities }
+  const { text } = object as GQLBlob
+  if (text) {
+    return { type: "Blob", text }
+  }
+
+  throw new Error("It should be unreached.")
 }
