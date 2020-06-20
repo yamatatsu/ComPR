@@ -1,11 +1,11 @@
 import React, { Suspense } from "react"
 import { useHistory } from "react-router"
 import { useRepoEntities } from "./hooks"
-import { FileList } from "./presentation/FileList"
+import { FileList } from "./FileList"
 
 type Props = { owner: string; repo: string; branch: string }
 export const Explorer = (props: Props) => {
-  const Editor = React.lazy(() => import("./presentation/Editor"))
+  const Editor = React.lazy(() => import("./Editor"))
 
   const { owner, repo, branch } = props
   const currentPath = location.pathname.replace(/\/$/, "")

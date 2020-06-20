@@ -35,12 +35,14 @@ new ServerStack(app, "ServerStack", {
   env,
 })
 
+const devCode = new lambda.AssetCode(`${__dirname}/../../lambda/dist`)
+const devLayerCode = new lambda.AssetCode(`${__dirname}/../layer`)
 new ServerStack(app, "DevServerStack", {
   client_id: dev_client_id,
   client_secret: dev_client_secret,
   redirect_uri: dev_redirect_uri,
-  code,
-  layerCode,
+  code: devCode,
+  layerCode: devLayerCode,
   allowOrigins: "http://localhost:8080",
   env,
 })

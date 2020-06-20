@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react"
-import { Repo } from "../../../types"
+import { Repo } from "../../types"
 
 type Props = {
   loading: boolean

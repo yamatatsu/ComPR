@@ -1,7 +1,7 @@
 import React from "react"
 import { useHistory } from "react-router"
 import { useRepositories } from "./hooks"
-import { RepoList as Component } from "./presentation"
+import { RepoList as Component } from "./RepoList"
 import { Repo } from "../../types"
 
 export const RepoList = () => {

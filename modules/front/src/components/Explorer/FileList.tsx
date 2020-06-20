@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react"
-import { GQLTreeEntry } from "../../../../schema"
+import { GQLTreeEntry } from "../../../schema"
 
 type Props = {
   entities: GQLTreeEntry[]
