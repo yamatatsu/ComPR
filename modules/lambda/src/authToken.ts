@@ -12,9 +12,14 @@ export const handler: Handler = async (event) => {
   if (!client_secret) throw new Error("no client_secret in `process.env`")
   if (!redirect_uri) throw new Error("no redirect_uri in `process.env`")
 
-  const code: string | undefined = event.body && JSON.parse(event.body).code
-  if (!code) {
-    console.warn("`event.queryStringParameters` has no code")
+  const { code, state } = event.body && JSON.parse(event.body)
+
+  if (!isString(code)) {
+    console.warn("`JSON.parse(event.body).code` should be string.")
+    return { statusCode: 400 }
+  }
+  if (!isString(state)) {
+    console.warn("`JSON.parse(event.body).state` should be string.")
     return { statusCode: 400 }
   }
 
@@ -26,7 +31,7 @@ export const handler: Handler = async (event) => {
       client_secret,
       redirect_uri,
       code,
-      // state: "", // TODO: impl me
+      state,
     }),
   })
 
@@ -42,4 +47,8 @@ export const handler: Handler = async (event) => {
   }
 
   return json
+}
+
+function isString(str: any): str is string {
+  return typeof str === "string"
 }
