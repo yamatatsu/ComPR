@@ -21,8 +21,6 @@ import { Explorer } from "./components/Explorer"
 import { NotFound } from "./components/NotFound"
 
 export function App() {
-  // const MonacoEditor = React.lazy(() => import("./MonacoEditor"))
-
   const [token, setToken] = useState<string | null>(
     process.env.token_for_debug ?? null,
   )
@@ -42,8 +40,6 @@ export function App() {
       </BrowserRouter>
     )
   }
-
-  console.log(token)
 
   const client = new ApolloClient({
     cache: new InMemoryCache({

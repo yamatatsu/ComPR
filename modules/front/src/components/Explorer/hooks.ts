@@ -40,7 +40,7 @@ export const useRepoEntities = (params: Params): Result => {
     `,
     { variables },
   )
-  console.log("%o", result)
+
   const { loading, error, data } = result
   if (loading) {
     return { type: "Loading", loading }

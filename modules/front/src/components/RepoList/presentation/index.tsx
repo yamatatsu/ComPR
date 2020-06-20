@@ -24,9 +24,10 @@ export const RepoList: FunctionComponent<Props> = (props) => {
       <ul>
         {repos.map((repo) => {
           const { owner, name } = repo
+          const path = `${owner}/${name}`
           return (
-            <li>
-              {owner}/{name}
+            <li key={path}>
+              path
               <button onClick={() => handleClickRepo({ owner, name })}>
                 go
               </button>

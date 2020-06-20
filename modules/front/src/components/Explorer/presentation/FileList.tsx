@@ -9,7 +9,7 @@ type Props = {
   handleClickObject: (path: string) => void
 }
 
-export const Explorer: FunctionComponent<Props> = (props) => {
+export const FileList: FunctionComponent<Props> = (props) => {
   const {
     entities,
     currentPath,
@@ -22,14 +22,15 @@ export const Explorer: FunctionComponent<Props> = (props) => {
     <>
       <ul>
         {!isRepositoryRoot && (
-          <li>
-            ../<button onClick={() => handleClickObject(parentPath)}>go</button>
+          <li key="parent">
+            ../
+            <button onClick={() => handleClickObject(parentPath)}>go</button>
           </li>
         )}
         {entities.map((entity) => {
           const { type, name } = entity
           return (
-            <li>
+            <li key={name}>
               [{type}]{name}
               <button
                 onClick={() => handleClickObject(`${currentPath}/${name}`)}

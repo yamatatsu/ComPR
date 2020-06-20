@@ -3,7 +3,7 @@ import * as monaco from "monaco-editor"
 import { MonacoMarkdownExtension } from "monaco-markdown"
 
 type Props = { code: string }
-export default function MonacoEditor(props: Props) {
+export default function Editor(props: Props) {
   const { code } = props
   const ref = useRef<HTMLDivElement>(null)
 
