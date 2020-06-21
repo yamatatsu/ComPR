@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && upbin tsc",
-    "type-check": "upbin tsc --noEmit"
+    "build": "rm -rf dist && upbin tsc"
   },
   "dependencies": {
     "node-fetch": "^2.6.0"
