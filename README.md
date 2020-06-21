@@ -8,4 +8,4 @@ ComPR allow you to quickly edit markdown and create PR without checkout, branch,
 
 ## Github Token
 
-ComPR take token only in browser js runtime, neither server, browser cookie nor browser storage.
+ComPR take token only in browser js runtime, neither server, cookie nor local storage.
