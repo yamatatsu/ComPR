@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "test": "jest"
+    "test": "jest",
+    "type-check": "lerna run type-check"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.56",
