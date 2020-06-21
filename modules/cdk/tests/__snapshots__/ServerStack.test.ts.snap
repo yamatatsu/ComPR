@@ -252,7 +252,7 @@ Object {
             "https://d2gteuwc4ok948.cloudfront.net",
           ],
         },
-        "Name": "ghanymede-httpApi-testServerStack",
+        "Name": "compr-httpApi-testServerStack",
         "ProtocolType": "HTTP",
       },
       "Type": "AWS::ApiGatewayV2::Api",

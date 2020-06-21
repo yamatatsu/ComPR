@@ -38,7 +38,7 @@ export class ServerStack extends cdk.Stack {
     })
 
     const httpApi = new apigateway.HttpApi(this, "httpApi", {
-      apiName: `ghanymede-httpApi-${id}`,
+      apiName: `compr-httpApi-${id}`,
       corsPreflight: {
         allowCredentials: false,
         allowHeaders: ["content-type"],
