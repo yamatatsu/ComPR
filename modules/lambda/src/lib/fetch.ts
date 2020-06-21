@@ -24,5 +24,5 @@ export const fetch: Fetch = async (url, option) => {
     }
   }
 
-  return json
+  return { type: "ok", json }
 }
