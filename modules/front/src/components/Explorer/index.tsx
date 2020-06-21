@@ -2,18 +2,18 @@ import React, { Suspense } from "react"
 import { useHistory } from "react-router"
 import { useRepoEntities } from "./hooks"
 import { FileList } from "./FileList"
+import { getPaths, getExpression } from "./selectors"
 
 type Props = { owner: string; repo: string; branch: string }
 export const Explorer = (props: Props) => {
   const Editor = React.lazy(() => import("./Editor"))
 
   const { owner, repo, branch } = props
-  const currentPath = location.pathname.replace(/\/$/, "")
-  const repositoryPath = currentPath.replace(
-    new RegExp(`/${owner}/${repo}/${branch}/?`),
-    "",
+
+  const { currentPath, parentPath, repositoryPath } = getPaths(
+    location.pathname,
   )
-  const expression = `${branch}:${decodeURI(repositoryPath)}`
+  const expression = getExpression({ branch, repositoryPath })
 
   const result = useRepoEntities({
     owner,
@@ -22,7 +22,6 @@ export const Explorer = (props: Props) => {
   })
   const history = useHistory()
 
-  const parentPath = currentPath.replace(/[^/]*$/, "")
   const handleClickObject = (path: string) => {
     history.push(path)
   }

@@ -1,10 +1,13 @@
-import { useQuery } from "@apollo/react-hooks"
 import { gql } from "apollo-boost"
 import { Repo } from "../../types"
 import { GQLQuery } from "../../../schema"
+import { useQuery } from "../../hooks/useQuery"
 
-export const useRepositories = () => {
-  const { loading, error, data } = useQuery<GQLQuery>(gql`
+type Result =
+  | { type: "Loading"; loading: true }
+  | { type: "Loaded"; repos: Repo[] }
+export const useRepositories = (): Result => {
+  const result = useQuery(gql`
     {
       viewer {
         login
@@ -36,21 +39,12 @@ export const useRepositories = () => {
       }
     }
   `)
-  if (loading) {
-    return { loading, error, repos: [] }
-  }
 
-  if (error) {
-    return { loading, error, repos: [] }
-  }
+  if (result.type === "Loading") return result
 
-  if (!data) {
-    throw new Error("No data is fetched")
-  }
+  const repos = [...viewerRepos(result.data), ...orgRepos(result.data)]
 
-  const repos = [...viewerRepos(data), ...orgRepos(data)]
-
-  return { loading, error, repos }
+  return { type: "Loaded", repos }
 }
 
 function viewerRepos(data: GQLQuery): Repo[] {

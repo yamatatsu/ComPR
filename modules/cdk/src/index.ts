@@ -24,7 +24,6 @@ const app = new cdk.App()
 
 const code = new lambda.AssetCode(`${__dirname}/../../lambda/dist`)
 const layerCode = new lambda.AssetCode(`${__dirname}/../layer`)
-
 new ServerStack(app, "ServerStack", {
   client_id,
   client_secret,

@@ -1,6 +1,6 @@
-import { useQuery } from "@apollo/react-hooks"
+import { useQuery } from "../../hooks/useQuery"
 import { gql } from "apollo-boost"
-import { GQLQuery, GQLTree, GQLBlob, GQLTreeEntry } from "../../../schema"
+import { GQLTree, GQLBlob, GQLTreeEntry } from "../../../schema"
 
 type Params = {
   owner: string
@@ -16,7 +16,7 @@ export const useRepoEntities = (params: Params): Result => {
   const { owner, name, expression } = params
 
   const variables = { owner, name, expression }
-  const result = useQuery<GQLQuery>(
+  const result = useQuery(
     gql`
       query getRepoEntities(
         $owner: String!
@@ -41,20 +41,9 @@ export const useRepoEntities = (params: Params): Result => {
     { variables },
   )
 
-  const { loading, error, data } = result
-  if (loading) {
-    return { type: "Loading", loading }
-  }
+  if (result.type === "Loading") return result
 
-  if (error) {
-    throw error
-  }
-
-  if (!data) {
-    throw new Error("No data is fetched")
-  }
-
-  const object = data.repository?.object
+  const object = result.data.repository?.object
 
   if (!object) {
     throw new Error("No data is fetched")

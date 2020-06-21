@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react"
-import { v4 as uuid } from "uuid"
 import { getConstants } from "../constants"
 
 const { api_origin } = getConstants()

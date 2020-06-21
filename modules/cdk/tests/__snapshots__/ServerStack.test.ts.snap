@@ -1,0 +1,308 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ServerStack snapshot test 1`] = `
+Object {
+  "Outputs": Object {
+    "apiurl": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://",
+            Object {
+              "Ref": "httpApiC9FAD708",
+            },
+            ".execute-api.ap-northeast-1.",
+            Object {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eArtifactHashFC4A34F8": Object {
+      "Description": "Artifact hash for asset \\"bd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031e\\"",
+      "Type": "String",
+    },
+    "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3Bucket0AE755F6": Object {
+      "Description": "S3 bucket for asset \\"bd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031e\\"",
+      "Type": "String",
+    },
+    "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3VersionKey5802EF7E": Object {
+      "Description": "S3 key for asset version \\"bd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031e\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "NodeModulesLayer29E0D577": Object {
+      "Properties": Object {
+        "CompatibleRuntimes": Array [
+          "nodejs12.x",
+        ],
+        "Content": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3Bucket0AE755F6",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3VersionKey5802EF7E",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3VersionKey5802EF7E",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "authTokenHandlerF2BD6823": Object {
+      "DependsOn": Array [
+        "authTokenHandlerServiceRoleDefaultPolicyD562D88F",
+        "authTokenHandlerServiceRole02CDB66E",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3Bucket0AE755F6",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3VersionKey5802EF7E",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersbd2c14e17e788a4d2e39a4f6550c415bff26eeb7e6a8365355441fcad7e8031eS3VersionKey5802EF7E",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "client_id": "test_client_id",
+            "client_secret": "test_client_secret",
+            "redirect_uri": "test_redirect_uri",
+          },
+        },
+        "Handler": "authToken.handler",
+        "Layers": Array [
+          Object {
+            "Ref": "NodeModulesLayer29E0D577",
+          },
+        ],
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "authTokenHandlerServiceRole02CDB66E",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "TracingConfig": Object {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "authTokenHandlerServiceRole02CDB66E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "authTokenHandlerServiceRoleDefaultPolicyD562D88F": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "authTokenHandlerServiceRoleDefaultPolicyD562D88F",
+        "Roles": Array [
+          Object {
+            "Ref": "authTokenHandlerServiceRole02CDB66E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "authTokenHandlertestServerStackhttpApiPOSTauthtoken83BE2951PermissionEF82D263": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "authTokenHandlerF2BD6823",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:xxxxxs:",
+              Object {
+                "Ref": "httpApiC9FAD708",
+              },
+              "/*/*/auth/token",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "httpApiC9FAD708": Object {
+      "Properties": Object {
+        "CorsConfiguration": Object {
+          "AllowCredentials": false,
+          "AllowHeaders": Array [
+            "content-type",
+          ],
+          "AllowMethods": Array [
+            "GET",
+            "POST",
+          ],
+          "AllowOrigins": Array [
+            "https://d2gteuwc4ok948.cloudfront.net",
+          ],
+        },
+        "Name": "ghanymede-httpApi-testServerStack",
+        "ProtocolType": "HTTP",
+      },
+      "Type": "AWS::ApiGatewayV2::Api",
+    },
+    "httpApiDefaultStage49B103A5": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "httpApiC9FAD708",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "httpApiPOSTauthtoken1E5AC444": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "httpApiC9FAD708",
+        },
+        "RouteKey": "POST /auth/token",
+        "Target": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "integrations/",
+              Object {
+                "Ref": "httpApiPOSTauthtokenPOSTauthtokenIntegration3DC138AD",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "httpApiPOSTauthtokenPOSTauthtokenIntegration3DC138AD": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "httpApiC9FAD708",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": Object {
+          "Fn::GetAtt": Array [
+            "authTokenHandlerF2BD6823",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+  },
+}
+`;
