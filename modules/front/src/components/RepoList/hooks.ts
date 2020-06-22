@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost"
 import { Repo } from "../../types"
-import { GQLQuery } from "../../../schema"
+import { GQLQuery, Maybe, GQLRepository } from "../../../schema"
 import { useQuery } from "../../hooks/useQuery"
 
 type Result =
@@ -19,6 +19,9 @@ export const useRepositories = (): Result => {
         ) {
           nodes {
             name
+            defaultBranchRef {
+              name
+            }
           }
         }
         organizations(last: 20) {
@@ -32,6 +35,9 @@ export const useRepositories = (): Result => {
             ) {
               nodes {
                 name
+                defaultBranchRef {
+                  name
+                }
               }
             }
           }
@@ -49,25 +55,29 @@ export const useRepositories = (): Result => {
 
 function viewerRepos(data: GQLQuery): Repo[] {
   const { login, repositories } = data.viewer
-  const repos = repositories.nodes
-    ?.map((repo) => {
-      if (!repo) return
-      return { owner: login, name: repo.name }
-    })
-    .filter(isNotNull)
+  const repos = repositories.nodes?.map(mapToRepo(login)).filter(isNotNull)
   return repos ?? []
 }
 
 function orgRepos(data: GQLQuery): Repo[] {
   const repos = data.viewer.organizations.nodes
-    ?.flatMap((org) => {
-      return org?.repositories.nodes?.map((repo) => {
-        if (!repo) return
-        return { owner: org.login, name: repo.name }
-      })
-    })
+    ?.flatMap((org) => org?.repositories.nodes?.map(mapToRepo(org.login)))
     .filter(isNotNull)
   return repos ?? []
+}
+
+const mapToRepo = (owner: string) => (
+  repository: Maybe<GQLRepository>,
+): Repo | undefined => {
+  if (!owner) return
+  if (!repository) return
+  const defaultBranchName = repository.defaultBranchRef?.name
+  if (!defaultBranchName) return
+  return {
+    owner,
+    name: repository.name,
+    defaultBranchName,
+  }
 }
 
 function isNotNull<T>(arg: T | undefined | null): arg is T {

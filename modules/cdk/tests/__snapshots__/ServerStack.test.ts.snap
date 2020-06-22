@@ -252,7 +252,7 @@ Object {
             "https://d2gteuwc4ok948.cloudfront.net",
           ],
         },
-        "Name": "compr-httpApi-testServerStack",
+        "Name": "cooprate-httpApi-testServerStack",
         "ProtocolType": "HTTP",
       },
       "Type": "AWS::ApiGatewayV2::Api",

@@ -29,7 +29,7 @@ export const Template: FunctionComponent = ({ children }) => {
             <Box as={Flex} alignItems="center">
               <CircleOcticon icon={GitPullRequest} size={32} />
               <Text as="p" ml={16}>
-                ComPR
+                CooPRate
               </Text>
             </Box>
             <SelectMenu>
