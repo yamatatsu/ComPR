@@ -1,85 +1,55 @@
-import { gql } from "apollo-boost"
+import { useState, useEffect } from "react"
 import { Repo } from "../../types"
-import { GQLQuery, Maybe, GQLRepository } from "../../../schema"
-import { useQuery } from "../../hooks/useQuery"
 
 type Result =
   | { type: "Loading"; loading: true }
   | { type: "Loaded"; repos: Repo[] }
+
 export const useRepositories = (): Result => {
-  const result = useQuery(gql`
-    {
-      viewer {
-        login
-        repositories(
-          first: 20
-          isFork: false
-          isLocked: false
-          orderBy: { field: UPDATED_AT, direction: DESC }
-        ) {
-          nodes {
-            name
-            defaultBranchRef {
-              name
-            }
-          }
-        }
-        organizations(last: 20) {
-          nodes {
-            login
-            repositories(
-              first: 20
-              isFork: false
-              isLocked: false
-              orderBy: { field: UPDATED_AT, direction: DESC }
-            ) {
-              nodes {
-                name
-                defaultBranchRef {
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
+  const [result, setResult] = useState<
+    { ok: true; data: GitHubRepositories } | { ok: false; error: any } | null
+  >(null)
+  useEffect(() => {
+    useInstalledRepositories()
+      .then((data) => setResult({ ok: true, data }))
+      .catch((error) => setResult({ ok: false, error }))
+  }, [])
 
-  if (result.type === "Loading") return result
+  if (!result) return { type: "Loading", loading: true }
 
-  const repos = [...viewerRepos(result.data), ...orgRepos(result.data)]
+  if (!result.ok) throw result
 
-  return { type: "Loaded", repos }
-}
-
-function viewerRepos(data: GQLQuery): Repo[] {
-  const { login, repositories } = data.viewer
-  const repos = repositories.nodes?.map(mapToRepo(login)).filter(isNotNull)
-  return repos ?? []
-}
-
-function orgRepos(data: GQLQuery): Repo[] {
-  const repos = data.viewer.organizations.nodes
-    ?.flatMap((org) => org?.repositories.nodes?.map(mapToRepo(org.login)))
-    .filter(isNotNull)
-  return repos ?? []
-}
-
-const mapToRepo = (owner: string) => (
-  repository: Maybe<GQLRepository>,
-): Repo | undefined => {
-  if (!owner) return
-  if (!repository) return
-  const defaultBranchName = repository.defaultBranchRef?.name
-  if (!defaultBranchName) return
   return {
-    owner,
-    name: repository.name,
-    defaultBranchName,
+    type: "Loaded",
+    repos: result.data.repositories.map((repo) => ({
+      name: repo.name,
+      owner: repo.owner.login,
+      defaultBranchName: repo.default_branch,
+    })),
   }
 }
 
-function isNotNull<T>(arg: T | undefined | null): arg is T {
-  return !!arg
+type GitHubRepositories = {
+  repositories: [
+    { owner: { login: string }; name: string; default_branch: string },
+  ]
+}
+
+const useInstalledRepositories = async (): Promise<GitHubRepositories> => {
+  const res = await fetch(
+    "https://api.github.com/user/installations/9903615/repositories",
+    {
+      headers: {
+        Authorization: "token 15858b40eb82bb6cc75531ad8b410e219e25c8f8",
+        Accept: "application/vnd.github.machine-man-preview+json",
+      },
+    },
+  )
+
+  if (!res.ok) {
+    throw res
+  }
+
+  const json = await res.json()
+  return json
 }
