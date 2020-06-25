@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react"
 import * as monaco from "monaco-editor"
 import { MonacoMarkdownExtension } from "monaco-markdown"
+import { Template } from "../templates"
 
 type Props = { code: string }
 export default function Editor(props: Props) {
@@ -24,5 +25,9 @@ export default function Editor(props: Props) {
       new MonacoMarkdownExtension().activate(ed)
     }
   }, [ref])
-  return <div style={{ width: "100%", height: "100%" }} ref={ref}></div>
+  return (
+    <Template>
+      <div style={{ width: "100%", height: "100%" }} ref={ref}></div>
+    </Template>
+  )
 }

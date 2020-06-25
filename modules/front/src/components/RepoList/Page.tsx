@@ -7,7 +7,7 @@ type Props = {
   handleClickRepo: (repo: Repo) => void
 }
 
-export const RepoList: FunctionComponent<Props> = (props) => {
+export const Page: FunctionComponent<Props> = (props) => {
   const { repos, handleClickRepo } = props
 
   return (

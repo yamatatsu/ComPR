@@ -3,3 +3,8 @@ export type Repo = {
   name: string
   defaultBranchName: string
 }
+
+export type TreeEntry = {
+  type: string
+  name: string
+}

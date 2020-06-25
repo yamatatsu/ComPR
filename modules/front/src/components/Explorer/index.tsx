@@ -1,12 +1,12 @@
 import React, { Suspense } from "react"
 import { useHistory } from "react-router"
 import { useRepoEntities } from "./hooks"
-import { FileList } from "./FileList"
+import { FileListPage } from "./FileListPage"
 import { getPaths, getExpression } from "./selectors"
 
 type Props = { owner: string; repo: string; branch: string }
 export const Explorer = (props: Props) => {
-  const Editor = React.lazy(() => import("./Editor"))
+  const EditorPage = React.lazy(() => import("./EditorPage"))
 
   const { owner, repo, branch } = props
 
@@ -33,7 +33,7 @@ export const Explorer = (props: Props) => {
       const isRepositoryRoot = repositoryPath === ""
 
       return (
-        <FileList
+        <FileListPage
           entities={result.entities}
           currentPath={currentPath}
           parentPath={parentPath}
@@ -45,7 +45,7 @@ export const Explorer = (props: Props) => {
     case "Blob":
       return (
         <Suspense fallback={<div>Loading...</div>}>
-          <Editor code={result.text} />
+          <EditorPage code={result.text} />
         </Suspense>
       )
   }

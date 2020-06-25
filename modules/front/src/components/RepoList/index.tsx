@@ -1,7 +1,7 @@
 import React from "react"
 import { useHistory } from "react-router"
 import { useRepositories } from "./hooks"
-import { RepoList as Component } from "./RepoList"
+import { Page } from "./Page"
 import { Repo } from "../../types"
 
 export const RepoList = () => {
@@ -16,5 +16,5 @@ export const RepoList = () => {
     return <div>loading...</div>
   }
 
-  return <Component repos={result.repos} handleClickRepo={handleClickRepo} />
+  return <Page repos={result.repos} handleClickRepo={handleClickRepo} />
 }

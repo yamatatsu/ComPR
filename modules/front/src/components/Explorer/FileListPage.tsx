@@ -1,15 +1,16 @@
 import React, { FunctionComponent } from "react"
-import { GQLTreeEntry } from "../../../schema"
+import { TreeEntry } from "../../types"
+import { Template } from "../templates"
 
 type Props = {
-  entities: GQLTreeEntry[]
+  entities: TreeEntry[]
   currentPath: string
   parentPath: string
   isRepositoryRoot: boolean
   handleClickObject: (path: string) => void
 }
 
-export const FileList: FunctionComponent<Props> = (props) => {
+export const FileListPage: FunctionComponent<Props> = (props) => {
   const {
     entities,
     currentPath,
@@ -19,7 +20,7 @@ export const FileList: FunctionComponent<Props> = (props) => {
   } = props
 
   return (
-    <>
+    <Template>
       <ul>
         {!isRepositoryRoot && (
           <li key="parent">
@@ -41,6 +42,6 @@ export const FileList: FunctionComponent<Props> = (props) => {
           )
         })}
       </ul>
-    </>
+    </Template>
   )
 }
