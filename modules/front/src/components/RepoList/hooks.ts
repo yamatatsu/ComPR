@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { Repo } from "../../types"
+import { fetchInstalledRepositories } from "../../lib/apiClient"
 
 type Result =
   | { type: "Loading"; loading: true }
@@ -10,7 +11,7 @@ export const useRepositories = (): Result => {
     { ok: true; data: GitHubRepositories } | { ok: false; error: any } | null
   >(null)
   useEffect(() => {
-    useInstalledRepositories()
+    fetchInstalledRepositories()
       .then((data) => setResult({ ok: true, data }))
       .catch((error) => setResult({ ok: false, error }))
   }, [])
@@ -33,23 +34,4 @@ type GitHubRepositories = {
   repositories: [
     { owner: { login: string }; name: string; default_branch: string },
   ]
-}
-
-const useInstalledRepositories = async (): Promise<GitHubRepositories> => {
-  const res = await fetch(
-    "https://api.github.com/user/installations/9903615/repositories",
-    {
-      headers: {
-        Authorization: "token 15858b40eb82bb6cc75531ad8b410e219e25c8f8",
-        Accept: "application/vnd.github.machine-man-preview+json",
-      },
-    },
-  )
-
-  if (!res.ok) {
-    throw res
-  }
-
-  const json = await res.json()
-  return json
 }

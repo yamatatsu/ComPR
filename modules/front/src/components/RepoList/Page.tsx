@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react"
-import { Template } from "../templates"
 import { Repo } from "../../types"
 
 type Props = {
@@ -11,7 +10,7 @@ export const Page: FunctionComponent<Props> = (props) => {
   const { repos, handleClickRepo } = props
 
   return (
-    <Template>
+    <>
       <ul>
         {repos.map((repo) => {
           const { owner, name } = repo
@@ -24,6 +23,6 @@ export const Page: FunctionComponent<Props> = (props) => {
           )
         })}
       </ul>
-    </Template>
+    </>
   )
 }

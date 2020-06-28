@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react"
-import { TreeEntry } from "../../types"
-import { Template } from "../templates"
+import { BorderBox } from "@primer/components"
+import { TreeEntry } from "../../../types"
 
-type Props = {
+export type Props = {
   entities: TreeEntry[]
   currentPath: string
   parentPath: string
@@ -10,7 +10,7 @@ type Props = {
   handleClickObject: (path: string) => void
 }
 
-export const FileListPage: FunctionComponent<Props> = (props) => {
+export const FileList: FunctionComponent<Props> = (props) => {
   const {
     entities,
     currentPath,
@@ -20,7 +20,7 @@ export const FileListPage: FunctionComponent<Props> = (props) => {
   } = props
 
   return (
-    <Template>
+    <BorderBox backgroundColor="bg.grayLight">
       <ul>
         {!isRepositoryRoot && (
           <li key="parent">
@@ -42,6 +42,6 @@ export const FileListPage: FunctionComponent<Props> = (props) => {
           )
         })}
       </ul>
-    </Template>
+    </BorderBox>
   )
 }

@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react"
+import { Box, LayoutProps } from "@primer/components"
 import * as monaco from "monaco-editor"
 import { MonacoMarkdownExtension } from "monaco-markdown"
-import { Template } from "../templates"
 
-type Props = { code: string }
-export default function Editor(props: Props) {
-  const { code } = props
+export type Props = { code: string }
+export default function Editor(props: Props & LayoutProps) {
+  const { code, ...layoutProps } = props
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -25,9 +25,5 @@ export default function Editor(props: Props) {
       new MonacoMarkdownExtension().activate(ed)
     }
   }, [ref])
-  return (
-    <Template>
-      <div style={{ width: "100%", height: "100%" }} ref={ref}></div>
-    </Template>
-  )
+  return <Box {...layoutProps} ref={ref}></Box>
 }

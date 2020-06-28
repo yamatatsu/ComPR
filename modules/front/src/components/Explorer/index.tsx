@@ -1,13 +1,11 @@
-import React, { Suspense } from "react"
+import React from "react"
 import { useHistory } from "react-router"
-import { useRepoEntities } from "./hooks"
-import { FileListPage } from "./FileListPage"
+import { useExplorerData } from "./hooks"
+import { Page } from "./Page"
 import { getPaths, getExpression } from "./selectors"
 
 type Props = { owner: string; repo: string; branch: string }
 export const Explorer = (props: Props) => {
-  const EditorPage = React.lazy(() => import("./EditorPage"))
-
   const { owner, repo, branch } = props
 
   const { currentPath, parentPath, repositoryPath } = getPaths(
@@ -15,38 +13,35 @@ export const Explorer = (props: Props) => {
   )
   const expression = getExpression({ branch, repositoryPath })
 
-  const result = useRepoEntities({
+  const result = useExplorerData({
     owner,
     name: repo,
     expression,
   })
   const history = useHistory()
 
+  if (result.loading) {
+    return <div>Loading...</div>
+  }
+
   const handleClickObject = (path: string) => {
     history.push(path)
   }
 
-  switch (result.type) {
-    case "Loading":
-      return <div>Loading...</div>
-    case "Tree": {
-      const isRepositoryRoot = repositoryPath === ""
+  const isRepositoryRoot = repositoryPath === ""
 
-      return (
-        <FileListPage
-          entities={result.entities}
-          currentPath={currentPath}
-          parentPath={parentPath}
-          isRepositoryRoot={isRepositoryRoot}
-          handleClickObject={handleClickObject}
-        />
-      )
-    }
-    case "Blob":
-      return (
-        <Suspense fallback={<div>Loading...</div>}>
-          <EditorPage code={result.text} />
-        </Suspense>
-      )
-  }
+  return (
+    <Page
+      fileListProps={{
+        entities: result.entities,
+        currentPath: currentPath,
+        parentPath: parentPath,
+        isRepositoryRoot: isRepositoryRoot,
+        handleClickObject: handleClickObject,
+      }}
+      editorProps={{
+        code: result.text,
+      }}
+    />
+  )
 }
