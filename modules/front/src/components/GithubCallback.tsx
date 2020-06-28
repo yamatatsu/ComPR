@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react"
 import { getConstants } from "../constants"
+import { setToken as setTokenForApi } from "../lib/apiClient"
 
 const { api_origin } = getConstants()
 
@@ -26,6 +27,7 @@ export const GithubCallback: FunctionComponent<Props> = (props) => {
     .then((result) => result.json())
     .then((json) => {
       setToken(json.access_token)
+      setTokenForApi(json.access_token)
     })
 
   return <div>Auth Loading...</div>

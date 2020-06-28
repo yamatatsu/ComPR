@@ -1,5 +1,5 @@
-import { useQuery } from "../../hooks/useQuery"
 import { gql } from "apollo-boost"
+import { useQuery } from "../../hooks/useQuery"
 import { GQLTree, GQLBlob, GQLTreeEntry } from "../../../schema"
 
 type Params = {
@@ -8,56 +8,46 @@ type Params = {
   expression: string
 }
 type Result =
-  | { type: "Loading"; loading: true }
-  | { type: "Tree"; entities: GQLTreeEntry[] }
-  | { type: "Blob"; text: string }
+  | { loading: true }
+  | { loading: false; entities: GQLTreeEntry[]; text: string }
 
-export const useRepoEntities = (params: Params): Result => {
+export const useExplorerData = (params: Params): Result => {
   const { owner, name, expression } = params
 
-  const variables = { owner, name, expression }
-  const result = useQuery(
-    gql`
-      query getRepoEntities(
-        $owner: String!
-        $name: String!
-        $expression: String!
-      ) {
-        repository(owner: $owner, name: $name) {
-          object(expression: $expression) {
-            ... on Tree {
-              entries {
-                name
-                type
-              }
-            }
-            ... on Blob {
-              text
-            }
-          }
-        }
-      }
-    `,
-    { variables },
-  )
+  const result = useQuery(gqlGetRepoEntities, {
+    variables: { owner, name, expression },
+  })
 
-  if (result.type === "Loading") return result
+  if (result.type === "Loading") return { loading: true }
 
   const object = result.data.repository?.object
 
   if (!object) {
     throw new Error("No data is fetched")
   }
-  const tree: GQLTree = object
-  const entities = tree.entries?.sort((a, b) => (a.type > b.type ? -1 : 1))
-  if (entities) {
-    return { type: "Tree", entities }
-  }
+  const entities =
+    (object as GQLTree).entries?.sort((a, b) => (a.type > b.type ? -1 : 1)) ??
+    []
 
-  const { text } = object as GQLBlob
-  if (text) {
-    return { type: "Blob", text }
-  }
+  const text = (object as GQLBlob).text ?? ""
 
-  throw new Error("It should be unreached.")
+  return { loading: false, entities, text }
 }
+
+const gqlGetRepoEntities = gql`
+  query getRepoEntities($owner: String!, $name: String!, $expression: String!) {
+    repository(owner: $owner, name: $name) {
+      object(expression: $expression) {
+        ... on Tree {
+          entries {
+            name
+            type
+          }
+        }
+        ... on Blob {
+          text
+        }
+      }
+    }
+  }
+`

@@ -12,6 +12,7 @@ import ApolloClient, {
 } from "apollo-boost"
 import { ApolloProvider } from "@apollo/react-hooks"
 import { ErrorBoundary } from "./ErrorBoundary"
+import { Theme } from "./Theme"
 
 import introspectionQueryResultData from "../schema/fragmentTypes.json"
 import { LandingPage } from "./components/LandingPage"
@@ -57,21 +58,23 @@ export function App() {
   return (
     <ErrorBoundary>
       <ApolloProvider client={client}>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/" component={RepoList} />
-            <Redirect from="/login/callback" to="/" />
-            <Route
-              path="/:owner/:repo/:branch"
-              component={() => {
-                const { owner, repo, branch } = useParams()
-                return <Explorer owner={owner} repo={repo} branch={branch} />
-              }}
-            />
-            <Route exact path="/not-found" component={NotFound} />
-            <Redirect from="*" to="/not-found" />
-          </Switch>
-        </BrowserRouter>
+        <Theme>
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" component={RepoList} />
+              <Redirect from="/login/callback" to="/" />
+              <Route
+                path="/:owner/:repo/:branch"
+                component={() => {
+                  const { owner, repo, branch } = useParams()
+                  return <Explorer owner={owner} repo={repo} branch={branch} />
+                }}
+              />
+              <Route exact path="/not-found" component={NotFound} />
+              <Redirect from="*" to="/not-found" />
+            </Switch>
+          </BrowserRouter>
+        </Theme>
       </ApolloProvider>
     </ErrorBoundary>
   )

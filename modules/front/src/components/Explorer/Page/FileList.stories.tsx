@@ -1,8 +1,8 @@
 import React from "react"
 import { action } from "@storybook/addon-actions"
-import { FileListPage } from "./FileListPage"
+import { FileList } from "./FileList"
 
-export default { title: "RepoList" }
+export default { title: "FileList" }
 
 const entities = [
   { type: "tree", name: "folder1" },
@@ -14,7 +14,7 @@ const entities = [
 ]
 
 export const Main = () => (
-  <FileListPage
+  <FileList
     entities={entities}
     currentPath={"test_currentPath"}
     parentPath={"test_parentPath"}
@@ -24,7 +24,7 @@ export const Main = () => (
 )
 
 export const RepositoryRoot = () => (
-  <FileListPage
+  <FileList
     entities={entities}
     currentPath={"test_currentPath"}
     parentPath={"test_parentPath"}

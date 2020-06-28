@@ -4,7 +4,7 @@ import { MockedProvider, MockedResponse } from "@apollo/react-testing"
 import { gql } from "apollo-boost"
 import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-boost"
 import introspectionQueryResultData from "../../../schema/fragmentTypes.json"
-import { useRepoEntities } from "./hooks"
+import { useExplorerData } from "./hooks"
 
 const renderHookOptions = (
   mocks: MockedResponse[],
@@ -54,7 +54,7 @@ const request = {
   },
 }
 
-describe("useRepoEntities", () => {
+describe("useExplorerData", () => {
   test("get tree", async () => {
     const mocks = [
       {
@@ -81,17 +81,17 @@ describe("useRepoEntities", () => {
     ]
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useRepoEntities({
+        useExplorerData({
           owner: "test_owner",
           name: "test_name",
           expression: "test_expression",
         }),
       renderHookOptions(mocks),
     )
-    expect(result.current).toEqual({ type: "Loading", loading: true })
+    expect(result.current).toEqual({ loading: true })
     await waitForNextUpdate()
     expect(result.current).toEqual({
-      type: "Tree",
+      loading: false,
       entities: [
         { type: "tree", name: "folder1", __typename: "TreeEntry" },
         { type: "tree", name: "folder2", __typename: "TreeEntry" },
@@ -100,6 +100,7 @@ describe("useRepoEntities", () => {
         { type: "blob", name: "file2", __typename: "TreeEntry" },
         { type: "blob", name: "file3", __typename: "TreeEntry" },
       ],
+      text: "",
     })
   })
 
@@ -119,17 +120,18 @@ describe("useRepoEntities", () => {
     ]
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useRepoEntities({
+        useExplorerData({
           owner: "test_owner",
           name: "test_name",
           expression: "test_expression",
         }),
       renderHookOptions(mocks),
     )
-    expect(result.current).toEqual({ type: "Loading", loading: true })
+    expect(result.current).toEqual({ loading: true })
     await waitForNextUpdate()
     expect(result.current).toEqual({
-      type: "Blob",
+      loading: false,
+      entities: [],
       text: "test_contents",
     })
   })
