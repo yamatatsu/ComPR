@@ -64,9 +64,9 @@ describe("useExplorerData", () => {
             repository: {
               object: {
                 entries: [
-                  { name: "folder1", type: "tree", __typename: "TreeEntry" },
-                  { name: "folder2", type: "tree", __typename: "TreeEntry" },
-                  { name: "folder3", type: "tree", __typename: "TreeEntry" },
+                  { name: "dir1", type: "tree", __typename: "TreeEntry" },
+                  { name: "dir2", type: "tree", __typename: "TreeEntry" },
+                  { name: "dir3", type: "tree", __typename: "TreeEntry" },
                   { name: "file1", type: "blob", __typename: "TreeEntry" },
                   { name: "file2", type: "blob", __typename: "TreeEntry" },
                   { name: "file3", type: "blob", __typename: "TreeEntry" },
@@ -93,9 +93,9 @@ describe("useExplorerData", () => {
     expect(result.current).toEqual({
       loading: false,
       entities: [
-        { type: "tree", name: "folder1", __typename: "TreeEntry" },
-        { type: "tree", name: "folder2", __typename: "TreeEntry" },
-        { type: "tree", name: "folder3", __typename: "TreeEntry" },
+        { type: "tree", name: "dir1", __typename: "TreeEntry" },
+        { type: "tree", name: "dir2", __typename: "TreeEntry" },
+        { type: "tree", name: "dir3", __typename: "TreeEntry" },
         { type: "blob", name: "file1", __typename: "TreeEntry" },
         { type: "blob", name: "file2", __typename: "TreeEntry" },
         { type: "blob", name: "file3", __typename: "TreeEntry" },

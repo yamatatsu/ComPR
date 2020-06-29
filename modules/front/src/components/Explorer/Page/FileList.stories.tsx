@@ -5,9 +5,9 @@ import { FileList } from "./FileList"
 export default { title: "FileList" }
 
 const entities = [
-  { type: "tree", name: "folder1" },
-  { type: "tree", name: "folder2" },
-  { type: "tree", name: "folder3" },
+  { type: "tree", name: "dir1" },
+  { type: "tree", name: "dir2" },
+  { type: "tree", name: "dir3" },
   { type: "blob", name: "file1" },
   { type: "blob", name: "file2" },
   { type: "blob", name: "file3" },

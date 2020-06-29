@@ -8,12 +8,12 @@ export const Main = () => (
   <Page
     fileListProps={{
       entities: [
-        { type: "tree", name: "folder1" },
-        { type: "tree", name: "folder2" },
-        { type: "tree", name: "folder3" },
-        { type: "tree", name: "folder4" },
-        { type: "tree", name: "folder5" },
-        { type: "tree", name: "folder6" },
+        { type: "tree", name: "dir1" },
+        { type: "tree", name: "dir2" },
+        { type: "tree", name: "dir3" },
+        { type: "tree", name: "dir4" },
+        { type: "tree", name: "dir5" },
+        { type: "tree", name: "dir6" },
         { type: "blob", name: "file1" },
         { type: "blob", name: "file2" },
         { type: "blob", name: "file3" },
@@ -85,9 +85,9 @@ export const ShortFileList = () => (
   <Page
     fileListProps={{
       entities: [
-        { type: "tree", name: "folder1" },
-        { type: "tree", name: "folder2" },
-        { type: "tree", name: "folder3" },
+        { type: "tree", name: "dir1" },
+        { type: "tree", name: "dir2" },
+        { type: "tree", name: "dir3" },
         { type: "blob", name: "file1" },
         { type: "blob", name: "file2" },
         { type: "blob", name: "file3" },
@@ -144,12 +144,12 @@ export const ShortCode = () => (
   <Page
     fileListProps={{
       entities: [
-        { type: "tree", name: "folder1" },
-        { type: "tree", name: "folder2" },
-        { type: "tree", name: "folder3" },
-        { type: "tree", name: "folder4" },
-        { type: "tree", name: "folder5" },
-        { type: "tree", name: "folder6" },
+        { type: "tree", name: "dir1" },
+        { type: "tree", name: "dir2" },
+        { type: "tree", name: "dir3" },
+        { type: "tree", name: "dir4" },
+        { type: "tree", name: "dir5" },
+        { type: "tree", name: "dir6" },
         { type: "blob", name: "file1" },
         { type: "blob", name: "file2" },
         { type: "blob", name: "file3" },
@@ -193,9 +193,9 @@ export const ShortBoth = () => (
   <Page
     fileListProps={{
       entities: [
-        { type: "tree", name: "folder1" },
-        { type: "tree", name: "folder2" },
-        { type: "tree", name: "folder3" },
+        { type: "tree", name: "dir1" },
+        { type: "tree", name: "dir2" },
+        { type: "tree", name: "dir3" },
         { type: "blob", name: "file1" },
         { type: "blob", name: "file2" },
         { type: "blob", name: "file3" },
