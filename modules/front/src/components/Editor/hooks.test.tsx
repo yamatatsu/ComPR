@@ -4,7 +4,7 @@ import { MockedProvider, MockedResponse } from "@apollo/react-testing"
 import { gql } from "apollo-boost"
 import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-boost"
 import introspectionQueryResultData from "../../../schema/fragmentTypes.json"
-import { useRepoEntities } from "./hooks"
+import { useFileContent } from "./hooks"
 
 const renderHookOptions = (
   mocks: MockedResponse[],
@@ -34,11 +34,8 @@ const request = {
     ) {
       repository(owner: $owner, name: $name) {
         object(expression: $expression) {
-          ... on Tree {
-            entries {
-              name
-              type
-            }
+          ... on Blob {
+            text
           }
         }
       }
@@ -51,25 +48,15 @@ const request = {
   },
 }
 
-describe("useRepoEntities", () => {
-  test("get tree", async () => {
+describe("useFileContent", () => {
+  test("get blob", async () => {
     const mocks = [
       {
         request,
         result: {
           data: {
             repository: {
-              object: {
-                entries: [
-                  { name: "dir1", type: "tree", __typename: "TreeEntry" },
-                  { name: "dir2", type: "tree", __typename: "TreeEntry" },
-                  { name: "dir3", type: "tree", __typename: "TreeEntry" },
-                  { name: "file1", type: "blob", __typename: "TreeEntry" },
-                  { name: "file2", type: "blob", __typename: "TreeEntry" },
-                  { name: "file3", type: "blob", __typename: "TreeEntry" },
-                ],
-                __typename: "Tree",
-              },
+              object: { text: "test_content", __typename: "Blob" },
               __typename: "Repository",
             },
           },
@@ -78,7 +65,7 @@ describe("useRepoEntities", () => {
     ]
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useRepoEntities({
+        useFileContent({
           owner: "test_owner",
           name: "test_name",
           expression: "test_expression",
@@ -89,14 +76,7 @@ describe("useRepoEntities", () => {
     await waitForNextUpdate()
     expect(result.current).toEqual({
       loading: false,
-      entities: [
-        { type: "tree", name: "dir1", __typename: "TreeEntry" },
-        { type: "tree", name: "dir2", __typename: "TreeEntry" },
-        { type: "tree", name: "dir3", __typename: "TreeEntry" },
-        { type: "blob", name: "file1", __typename: "TreeEntry" },
-        { type: "blob", name: "file2", __typename: "TreeEntry" },
-        { type: "blob", name: "file3", __typename: "TreeEntry" },
-      ],
+      content: "test_content",
     })
   })
 })

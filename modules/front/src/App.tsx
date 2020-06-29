@@ -20,6 +20,7 @@ import { GithubLogin } from "./components/GithubLogin"
 import { GithubCallback } from "./components/GithubCallback"
 import { RepoList } from "./components/RepoList"
 import { Explorer } from "./components/Explorer"
+import { NewEditor, EditEditor } from "./components/Editor"
 import { NotFound } from "./components/NotFound"
 
 export function App() {
@@ -64,7 +65,22 @@ export function App() {
               <Route exact path="/" component={RepoList} />
               <Redirect from="/login/callback" to="/" />
               <Route
-                path="/:owner/:repo/:branch"
+                path="/:owner/:repo/:branch/new"
+                component={() => {
+                  return <NewEditor />
+                }}
+              />
+              <Route
+                path="/:owner/:repo/:branch/edit"
+                component={() => {
+                  const { owner, repo, branch } = useParams()
+                  return (
+                    <EditEditor owner={owner} repo={repo} branch={branch} />
+                  )
+                }}
+              />
+              <Route
+                path="/:owner/:repo/:branch/list"
                 component={() => {
                   const { owner, repo, branch } = useParams()
                   return <Explorer owner={owner} repo={repo} branch={branch} />

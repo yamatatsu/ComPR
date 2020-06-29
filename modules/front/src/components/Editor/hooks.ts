@@ -1,15 +1,15 @@
 import { gql } from "apollo-boost"
 import { useQuery } from "../../hooks/useQuery"
-import { GQLTree, GQLTreeEntry } from "../../../schema"
+import { GQLBlob } from "../../../schema"
 
 type Params = {
   owner: string
   name: string
   expression: string
 }
-type Result = { loading: true } | { loading: false; entities: GQLTreeEntry[] }
+type Result = { loading: true } | { loading: false; content: string }
 
-export const useRepoEntities = (params: Params): Result => {
+export const useFileContent = (params: Params): Result => {
   const { owner, name, expression } = params
 
   const result = useQuery(gqlGetRepoEntities, {
@@ -23,22 +23,18 @@ export const useRepoEntities = (params: Params): Result => {
   if (!object) {
     throw new Error("No data is fetched")
   }
-  const entities =
-    (object as GQLTree).entries?.sort((a, b) => (a.type > b.type ? -1 : 1)) ??
-    []
 
-  return { loading: false, entities }
+  const content = (object as GQLBlob).text ?? ""
+
+  return { loading: false, content }
 }
 
 const gqlGetRepoEntities = gql`
   query getRepoEntities($owner: String!, $name: String!, $expression: String!) {
     repository(owner: $owner, name: $name) {
       object(expression: $expression) {
-        ... on Tree {
-          entries {
-            name
-            type
-          }
+        ... on Blob {
+          text
         }
       }
     }

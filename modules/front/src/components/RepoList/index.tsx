@@ -9,7 +9,7 @@ export const RepoList = () => {
   const history = useHistory()
   const handleClickRepo = (repo: Repo) => {
     const { owner, name, defaultBranchName } = repo
-    history.push(`/${owner}/${name}/${defaultBranchName}`)
+    history.push(`/${owner}/${name}/${defaultBranchName}/list`)
   }
 
   if (result.type === "Loading") {

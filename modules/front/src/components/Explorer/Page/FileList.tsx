@@ -25,7 +25,9 @@ export const FileList: FunctionComponent<Props> = (props) => {
         {!isRepositoryRoot && (
           <li key="parent">
             ../
-            <button onClick={() => handleClickObject(parentPath)}>go</button>
+            <button onClick={() => handleClickObject(`list/${parentPath}`)}>
+              go
+            </button>
           </li>
         )}
         {entities.map((entity) => {
@@ -33,11 +35,31 @@ export const FileList: FunctionComponent<Props> = (props) => {
           return (
             <li key={name}>
               [{type}]{name}
-              <button
-                onClick={() => handleClickObject(`${currentPath}/${name}`)}
-              >
-                go
-              </button>
+              {type === "tree" ? (
+                <button
+                  onClick={() =>
+                    handleClickObject(
+                      currentPath
+                        ? `list/${currentPath}/${name}`
+                        : `list/${name}`,
+                    )
+                  }
+                >
+                  go
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    handleClickObject(
+                      currentPath
+                        ? `edit/${currentPath}/${name}`
+                        : `edit/${name}`,
+                    )
+                  }
+                >
+                  edit
+                </button>
+              )}
             </li>
           )
         })}
