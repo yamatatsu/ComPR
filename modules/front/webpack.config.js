@@ -43,15 +43,11 @@ module.exports = {
     new MonacoWebpackPlugin(),
   ],
   devServer: {
-    index: "index.html",
+    // index: "index.html",
     historyApiFallback: {
-      index: "index.html",
-      disableDotRule: true,
-      rewrites: [
-        // { from: /^\/$/, to: "/views/landing.html" },
-        // { from: /^\/subpage/, to: "/views/subpage.html" },
-        { from: /./, to: "/index.html" },
-      ],
+      // index: "index.html",
+      // disableDotRule: true,
+      rewrites: [{ from: /./, to: "/index.html" }],
     },
     open: true,
     inline: true,

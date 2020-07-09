@@ -16,8 +16,9 @@ import { Theme } from "./Theme"
 
 import introspectionQueryResultData from "../schema/fragmentTypes.json"
 import { LandingPage } from "./components/LandingPage"
-import { GithubLogin } from "./components/GithubLogin"
+import { GithubLogin, GithubLoginAndRedirect } from "./components/GithubLogin"
 import { GithubCallback } from "./components/GithubCallback"
+import { Redirecter } from "./components/Redirecter"
 import { RepoList } from "./components/RepoList"
 import { Explorer } from "./components/Explorer"
 import { NewEditor, EditEditor } from "./components/Editor"
@@ -30,17 +31,20 @@ export function App() {
 
   if (!token) {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/login" component={GithubLogin} />
-          <Route exact path="/login/callback">
-            <GithubCallback setToken={setToken} />
-          </Route>
-          <Route exact path="/not-found" component={NotFound} />
-          <Redirect from="*" to="/not-found" />
-        </Switch>
-      </BrowserRouter>
+      <ErrorBoundary>
+        <Theme>
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" component={LandingPage} />
+              <Route exact path="/login" component={GithubLogin} />
+              <Route exact path="/login/callback">
+                <GithubCallback setToken={setToken} />
+              </Route>
+              <Route path="*" component={GithubLoginAndRedirect} />
+            </Switch>
+          </BrowserRouter>
+        </Theme>
+      </ErrorBoundary>
     )
   }
 
@@ -63,7 +67,7 @@ export function App() {
           <BrowserRouter>
             <Switch>
               <Route exact path="/" component={RepoList} />
-              <Redirect from="/login/callback" to="/" />
+              <Route exact path="/login/callback" component={Redirecter} />
               <Route
                 path="/:owner/:repo/:branch/new"
                 component={() => {
