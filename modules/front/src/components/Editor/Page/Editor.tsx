@@ -3,14 +3,17 @@ import { Box, LayoutProps } from "@primer/components"
 import * as monaco from "monaco-editor"
 import { MonacoMarkdownExtension } from "monaco-markdown"
 
-export type Props = { code: string }
+export type Props = {
+  content: string
+  setContent: (content: string) => void
+}
 export default function Editor(props: Props & LayoutProps) {
-  const { code, ...layoutProps } = props
+  const { content, setContent, ...layoutProps } = props
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (ref.current) {
-      const model = monaco.editor.createModel(code, "markdown")
+      const model = monaco.editor.createModel(content, "markdown")
       model.updateOptions({ tabSize: 2 })
       const ed = monaco.editor.create(ref.current, {
         model,
@@ -20,6 +23,9 @@ export default function Editor(props: Props & LayoutProps) {
         scrollBeyondLastLine: false,
         theme: "vs",
         minimap: { enabled: false },
+      })
+      ed.onDidChangeModelContent(() => {
+        setContent(ed.getValue())
       })
       // @ts-ignore
       new MonacoMarkdownExtension().activate(ed)

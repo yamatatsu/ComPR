@@ -1,10 +1,9 @@
 import React from "react"
 import { renderHook, RenderHookOptions } from "@testing-library/react-hooks"
 import { MockedProvider, MockedResponse } from "@apollo/react-testing"
-import { gql } from "apollo-boost"
 import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-boost"
 import introspectionQueryResultData from "../../../schema/fragmentTypes.json"
-import { useRepoEntities } from "./hooks"
+import { useRepoEntities, gqlGetRepoEntities } from "./hooks"
 
 const renderHookOptions = (
   mocks: MockedResponse[],
@@ -26,28 +25,11 @@ const renderHookOptions = (
 })
 
 const request = {
-  query: gql`
-    query getRepoEntities(
-      $owner: String!
-      $name: String!
-      $expression: String!
-    ) {
-      repository(owner: $owner, name: $name) {
-        object(expression: $expression) {
-          ... on Tree {
-            entries {
-              name
-              type
-            }
-          }
-        }
-      }
-    }
-  `,
+  query: gqlGetRepoEntities,
   variables: {
     owner: "test_owner",
-    name: "test_name",
-    expression: "test_expression",
+    repo: "test_repo",
+    expression: "test_branch:test_currentPath",
   },
 }
 
@@ -80,8 +62,9 @@ describe("useRepoEntities", () => {
       () =>
         useRepoEntities({
           owner: "test_owner",
-          name: "test_name",
-          expression: "test_expression",
+          repo: "test_repo",
+          branch: "test_branch",
+          currentPath: "test_currentPath",
         }),
       renderHookOptions(mocks),
     )

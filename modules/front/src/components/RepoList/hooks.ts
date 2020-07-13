@@ -31,7 +31,9 @@ export const useRepositories = (): Result => {
 }
 
 type GitHubRepositories = {
-  repositories: [
-    { owner: { login: string }; name: string; default_branch: string },
-  ]
+  repositories: {
+    owner: { login: string }
+    name: string
+    default_branch: string
+  }[]
 }

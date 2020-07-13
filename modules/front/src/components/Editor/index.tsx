@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useState, useMemo, useCallback } from "react"
 import { useFileContent } from "./hooks"
 import { Page } from "./Page"
-import { getPaths, getExpression } from "./selectors"
+import { getPaths } from "./selectors"
+import { commit } from "../../lib/apiClient"
 
 type Props = {
   owner: string
@@ -12,13 +13,17 @@ export const EditEditor = (props: Props) => {
   const { owner, repo, branch } = props
 
   const { currentPath } = getPaths(location.pathname)
-  const expression = getExpression({ branch, currentPath })
 
-  const result = useFileContent({
-    owner,
-    name: repo,
-    expression,
-  })
+  const result = useFileContent({ owner, repo, branch, currentPath })
+
+  const [openPRDialog, setOpenPRDialog] = useState(false)
+
+  const now = useMemo(() => new Date(), [])
+
+  const [content, setContent] = useState("")
+
+  const onDismiss = useCallback(() => setOpenPRDialog(false), [])
+  const onClickCreatePRButton = useCallback(() => setOpenPRDialog(true), [])
 
   if (result.loading) {
     return <div>Loading...</div>
@@ -27,12 +32,70 @@ export const EditEditor = (props: Props) => {
   return (
     <Page
       editorProps={{
-        code: result.content,
+        // MonacoEditor is used as non-controled component.
+        // So `result.content` is entered as props at once for init.
+        content: result.content,
+        setContent: setContent,
       }}
+      prDialogProps={{
+        isOpen: openPRDialog,
+        onDismiss,
+        userName: "userName",
+        now,
+        onSubmit: async (message, newBranch) => {
+          const res = await commit({
+            owner,
+            repo,
+            baseBranch: branch,
+            newBranch,
+            message,
+            path: currentPath,
+            content,
+          })
+          window.open(res.pullRequestUrl)
+        },
+      }}
+      onClickCreatePRButton={onClickCreatePRButton}
     />
   )
 }
 
-export const NewEditor = () => {
-  return <Page editorProps={{ code: "" }} />
+export const NewEditor = (props: Props) => {
+  const { owner, repo, branch } = props
+
+  const { currentPath } = getPaths(location.pathname)
+
+  const [content, setContent] = useState("")
+
+  const [openPRDialog, setOpenPRDialog] = useState(false)
+
+  const now = useMemo(() => new Date(), [])
+
+  return (
+    <Page
+      editorProps={{
+        content: "",
+        setContent: setContent,
+      }}
+      prDialogProps={{
+        isOpen: openPRDialog,
+        onDismiss: () => setOpenPRDialog(false),
+        userName: "userName",
+        now,
+        onSubmit: async (message, newBranch) => {
+          const res = await commit({
+            owner,
+            repo,
+            baseBranch: branch,
+            newBranch,
+            message,
+            path: currentPath,
+            content,
+          })
+          window.open(res.pullRequestUrl)
+        },
+      }}
+      onClickCreatePRButton={() => setOpenPRDialog(true)}
+    />
+  )
 }

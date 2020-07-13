@@ -1,10 +1,9 @@
 import React from "react"
 import { renderHook, RenderHookOptions } from "@testing-library/react-hooks"
 import { MockedProvider, MockedResponse } from "@apollo/react-testing"
-import { gql } from "apollo-boost"
 import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-boost"
 import introspectionQueryResultData from "../../../schema/fragmentTypes.json"
-import { useFileContent } from "./hooks"
+import { useFileContent, gqlGetRepoEntities } from "./hooks"
 
 const renderHookOptions = (
   mocks: MockedResponse[],
@@ -26,25 +25,12 @@ const renderHookOptions = (
 })
 
 const request = {
-  query: gql`
-    query getRepoEntities(
-      $owner: String!
-      $name: String!
-      $expression: String!
-    ) {
-      repository(owner: $owner, name: $name) {
-        object(expression: $expression) {
-          ... on Blob {
-            text
-          }
-        }
-      }
-    }
-  `,
+  query: gqlGetRepoEntities,
   variables: {
     owner: "test_owner",
-    name: "test_name",
-    expression: "test_expression",
+    repo: "test_repo",
+    expression: "test_branch:test_currentPath",
+    qualifiedName: "refs/heads/test_branch",
   },
 }
 
@@ -57,6 +43,10 @@ describe("useFileContent", () => {
           data: {
             repository: {
               object: { text: "test_content", __typename: "Blob" },
+              ref: {
+                target: { oid: "test_oid", __typename: "GitObject" },
+                __typename: "Ref",
+              },
               __typename: "Repository",
             },
           },
@@ -67,8 +57,9 @@ describe("useFileContent", () => {
       () =>
         useFileContent({
           owner: "test_owner",
-          name: "test_name",
-          expression: "test_expression",
+          repo: "test_repo",
+          branch: "test_branch",
+          currentPath: "test_currentPath",
         }),
       renderHookOptions(mocks),
     )
@@ -77,6 +68,7 @@ describe("useFileContent", () => {
     expect(result.current).toEqual({
       loading: false,
       content: "test_content",
+      sha: "test_oid",
     })
   })
 })
