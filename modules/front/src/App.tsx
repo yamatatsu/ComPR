@@ -71,7 +71,8 @@ export function App() {
               <Route
                 path="/:owner/:repo/:branch/new"
                 component={() => {
-                  return <NewEditor />
+                  const { owner, repo, branch } = useParams()
+                  return <NewEditor owner={owner} repo={repo} branch={branch} />
                 }}
               />
               <Route

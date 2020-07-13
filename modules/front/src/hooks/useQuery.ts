@@ -2,7 +2,9 @@ import { useQuery as _useQuery, QueryHookOptions } from "@apollo/react-hooks"
 import { DocumentNode } from "apollo-boost"
 import { GQLQuery } from "../../schema"
 
-type Result = { type: "Loading"; loading: true } | { type: "Loaded"; data: any }
+type Result =
+  | { type: "Loading"; loading: true }
+  | { type: "Loaded"; data: GQLQuery }
 
 export const useQuery = (
   query: DocumentNode,
