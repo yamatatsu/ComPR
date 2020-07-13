@@ -9,7 +9,12 @@ import {
 } from "@primer/components"
 import { GitPullRequest } from "@primer/octicons-react"
 
-export const HeaderNav: FunctionComponent = () => {
+type Props = {
+  content?: FunctionComponent
+}
+
+export const HeaderNav: FunctionComponent<Props> = (props) => {
+  const { content: HeaderContent } = props
   return (
     <Box
       width="100vw"
@@ -27,14 +32,17 @@ export const HeaderNav: FunctionComponent = () => {
           CooPRate
         </Text>
       </Box>
-      <SelectMenu>
-        <Button as="summary">User</Button>
-        <SelectMenu.Modal align="right">
-          <SelectMenu.List>
-            <SelectMenu.Item href="#">Sign out</SelectMenu.Item>
-          </SelectMenu.List>
-        </SelectMenu.Modal>
-      </SelectMenu>
+      <Flex>
+        {HeaderContent && <HeaderContent />}
+        <SelectMenu>
+          <Button as="summary">User</Button>
+          <SelectMenu.Modal align="right">
+            <SelectMenu.List>
+              <SelectMenu.Item href="#">Sign out</SelectMenu.Item>
+            </SelectMenu.List>
+          </SelectMenu.Modal>
+        </SelectMenu>
+      </Flex>
     </Box>
   )
 }
