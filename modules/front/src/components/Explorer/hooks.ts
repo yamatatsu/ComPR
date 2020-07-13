@@ -4,16 +4,19 @@ import { GQLTree, GQLTreeEntry } from "../../../schema"
 
 type Params = {
   owner: string
-  name: string
-  expression: string
+  repo: string
+  branch: string
+  currentPath: string
 }
 type Result = { loading: true } | { loading: false; entities: GQLTreeEntry[] }
 
 export const useRepoEntities = (params: Params): Result => {
-  const { owner, name, expression } = params
+  const { owner, repo, branch, currentPath } = params
+
+  const expression = `${branch}:${decodeURI(currentPath)}`
 
   const result = useQuery(gqlGetRepoEntities, {
-    variables: { owner, name, expression },
+    variables: { owner, repo, expression },
   })
 
   if (result.type === "Loading") return { loading: true }
@@ -30,9 +33,9 @@ export const useRepoEntities = (params: Params): Result => {
   return { loading: false, entities }
 }
 
-const gqlGetRepoEntities = gql`
-  query getRepoEntities($owner: String!, $name: String!, $expression: String!) {
-    repository(owner: $owner, name: $name) {
+export const gqlGetRepoEntities = gql`
+  query getRepoEntities($owner: String!, $repo: String!, $expression: String!) {
+    repository(owner: $owner, name: $repo) {
       object(expression: $expression) {
         ... on Tree {
           entries {

@@ -5,11 +5,3 @@ export const getPaths = (pathname: string) => {
 
   return { currentPath, parentPath }
 }
-
-export const getExpression = ({
-  branch,
-  currentPath,
-}: {
-  branch: string
-  currentPath: string
-}) => `${branch}:${decodeURI(currentPath)}`
