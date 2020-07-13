@@ -4,11 +4,3 @@ export const getPaths = (pathname: string) => {
 
   return { currentPath }
 }
-
-export const getExpression = ({
-  branch,
-  currentPath,
-}: {
-  branch: string
-  currentPath: string
-}) => `${branch}:${decodeURI(currentPath)}`
