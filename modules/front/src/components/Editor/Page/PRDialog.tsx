@@ -18,7 +18,7 @@ export type Props = {
   userName: string
   now: Date
   onDismiss: () => void
-  onSubmit: (message: string, branchName: string) => void
+  onSubmit: (message: string, branchName: string) => Promise<void>
 }
 export function PRDialog(props: Props) {
   const {
@@ -33,8 +33,20 @@ export function PRDialog(props: Props) {
   const [branchName, setBranchName] = useState(
     `${userName}-patch-${format(now, "yyyyMMddHHmmss")}`,
   )
+  const [submitState, setSubmitState] = useState<
+    "yet" | "submitting" | "success" | "error"
+  >("yet")
 
-  const _handleSubmit = () => handleSubmit(message, branchName)
+  const _handleSubmit = () => {
+    setSubmitState("submitting")
+    handleSubmit(message, branchName).then(
+      () => {
+        setSubmitState("success")
+        handleDismiss()
+      },
+      () => setSubmitState("error"),
+    )
+  }
 
   // submit on cmd+enter or ctrl+enter
   useEffect(() => {
@@ -73,7 +85,11 @@ export function PRDialog(props: Props) {
           />
           <Flex mt={2} justifyContent="flex-end">
             <Button onClick={handleDismiss}>Cancel</Button>
-            <ButtonPrimary ml={2} onClick={_handleSubmit}>
+            <ButtonPrimary
+              ml={2}
+              onClick={_handleSubmit}
+              disabled={submitState === "submitting"}
+            >
               Submit
             </ButtonPrimary>
           </Flex>

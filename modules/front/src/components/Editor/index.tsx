@@ -24,17 +24,6 @@ export const EditEditor = (props: Props) => {
 
   const onDismiss = useCallback(() => setOpenPRDialog(false), [])
   const onClickCreatePRButton = useCallback(() => setOpenPRDialog(true), [])
-  const onSubmit = useCallback((message, newBranch) => {
-    commit({
-      owner,
-      repo,
-      baseBranch: branch,
-      newBranch,
-      message,
-      path: currentPath,
-      content,
-    })
-  }, [])
 
   if (result.loading) {
     return <div>Loading...</div>
@@ -53,7 +42,18 @@ export const EditEditor = (props: Props) => {
         onDismiss,
         userName: "userName",
         now,
-        onSubmit,
+        onSubmit: async (message, newBranch) => {
+          const res = await commit({
+            owner,
+            repo,
+            baseBranch: branch,
+            newBranch,
+            message,
+            path: currentPath,
+            content,
+          })
+          window.open(res.pullRequestUrl)
+        },
       }}
       onClickCreatePRButton={onClickCreatePRButton}
     />
@@ -82,8 +82,8 @@ export const NewEditor = (props: Props) => {
         onDismiss: () => setOpenPRDialog(false),
         userName: "userName",
         now,
-        onSubmit: (message, newBranch) => {
-          commit({
+        onSubmit: async (message, newBranch) => {
+          const res = await commit({
             owner,
             repo,
             baseBranch: branch,
@@ -92,6 +92,7 @@ export const NewEditor = (props: Props) => {
             path: currentPath,
             content,
           })
+          window.open(res.pullRequestUrl)
         },
       }}
       onClickCreatePRButton={() => setOpenPRDialog(true)}
