@@ -16,9 +16,12 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true }
   }
 
-  componentDidCatch(_: any, errorInfo: any) {
+  componentDidCatch(error: any, errorInfo: any) {
     // TODO: use error tracing service
+    console.group("`ErrorBoundary` has caught a error.")
+    console.error(error)
     console.error(errorInfo)
+    console.groupEnd()
   }
 
   render() {
