@@ -1,11 +1,11 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import { useHistory } from "react-router"
 import { useRepoEntities } from "./hooks"
 import { Page } from "./Page"
 import { getPaths } from "./selectors"
 
 type Props = { owner: string; repo: string; branch: string }
-export const Explorer = (props: Props) => {
+export function Explorer(props: Props): ReactElement {
   const { owner, repo, branch } = props
 
   const { currentPath, parentPath } = getPaths(location.pathname)

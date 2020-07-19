@@ -1,8 +1,9 @@
-import React, { FunctionComponent } from "react"
+import React, { PropsWithChildren, ReactElement } from "react"
 import { BaseStyles, theme } from "@primer/components"
 import { ThemeProvider } from "styled-components"
 
-export const Theme: FunctionComponent = ({ children }) => {
+export function Theme(props: PropsWithChildren<{}>): ReactElement {
+  const { children } = props
   return (
     <BaseStyles>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>

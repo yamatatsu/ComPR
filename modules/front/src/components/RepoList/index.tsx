@@ -1,10 +1,10 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import { useHistory } from "react-router"
 import { useRepositories } from "./hooks"
 import { Page } from "./Page"
 import { Repo } from "../../types"
 
-export const RepoList = () => {
+export function RepoList(): ReactElement {
   const result = useRepositories()
   const history = useHistory()
   const handleClickRepo = (repo: Repo) => {

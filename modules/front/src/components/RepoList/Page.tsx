@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react"
+import React, { ReactElement } from "react"
 import { Repo } from "../../types"
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
   handleClickRepo: (repo: Repo) => void
 }
 
-export const Page: FunctionComponent<Props> = (props) => {
+export function Page(props: Props): ReactElement {
   const { repos, handleClickRepo } = props
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react"
+import React, { ReactElement, useState, useMemo, useCallback } from "react"
 import { useFileContent } from "./hooks"
 import { Page } from "./Page"
 import { getPaths } from "./selectors"
@@ -9,7 +9,7 @@ type Props = {
   repo: string
   branch: string
 }
-export const EditEditor = (props: Props) => {
+export function EditEditor(props: Props): ReactElement {
   const { owner, repo, branch } = props
 
   const { currentPath } = getPaths(location.pathname)
@@ -60,7 +60,7 @@ export const EditEditor = (props: Props) => {
   )
 }
 
-export const NewEditor = (props: Props) => {
+export function NewEditor(props: Props): ReactElement {
   const { owner, repo, branch } = props
 
   const { currentPath } = getPaths(location.pathname)

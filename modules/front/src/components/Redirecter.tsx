@@ -1,8 +1,8 @@
-import React, { FunctionComponent, useEffect } from "react"
+import React, { ReactElement, useEffect } from "react"
 import { useHistory } from "react-router"
 import { getPlainState } from "../lib/oauthState"
 
-export const Redirecter: FunctionComponent = () => {
+export function Redirecter(): ReactElement {
   const history = useHistory()
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react"
+import React, { ReactElement, FunctionComponent } from "react"
 import {
   Box,
   CircleOcticon,
@@ -13,7 +13,7 @@ type Props = {
   content?: FunctionComponent
 }
 
-export const HeaderNav: FunctionComponent<Props> = (props) => {
+export function HeaderNav(props: Props): ReactElement {
   const { content: HeaderContent } = props
   return (
     <Box

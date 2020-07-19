@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react"
+import React, { ReactElement } from "react"
 import { Flex, Sticky, Box, ButtonPrimary } from "@primer/components"
 import { HeaderNav } from "../../shared/HeaderNav"
 import Editor, { Props as EditorProps } from "./Editor"
@@ -9,7 +9,7 @@ type Props = {
   prDialogProps: PRDialogProps
   onClickCreatePRButton: () => void
 }
-export const Page: FunctionComponent<Props> = (props) => {
+export function Page(props: Props): ReactElement {
   const { editorProps, prDialogProps, onClickCreatePRButton } = props
 
   return (

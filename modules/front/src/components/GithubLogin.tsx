@@ -1,10 +1,10 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import { getConstants } from "../constants"
 import { createState } from "../lib/oauthState"
 
 const { redirect_uri, client_id } = getConstants()
 
-export const GithubLogin = () => {
+export function GithubLogin(): ReactElement {
   const state = createState({ redirectTo: "/" })
 
   const params = new URLSearchParams({
@@ -20,7 +20,7 @@ export const GithubLogin = () => {
   return <div>Redirect to Github...</div>
 }
 
-export const GithubLoginAndRedirect = () => {
+export function GithubLoginAndRedirect(): ReactElement {
   const state = createState({ redirectTo: location.pathname })
 
   const params = new URLSearchParams({

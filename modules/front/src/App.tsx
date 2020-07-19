@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { ReactElement, useState } from "react"
 import {
   BrowserRouter,
   Route,
@@ -24,7 +24,7 @@ import { Explorer } from "./components/Explorer"
 import { NewEditor, EditEditor } from "./components/Editor"
 import { NotFound } from "./components/NotFound"
 
-export function App() {
+export function App(): ReactElement {
   const [token, setToken] = useState<string | null>(
     process.env.token_for_debug ?? null,
   )

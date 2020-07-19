@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react"
+import React, { ReactElement } from "react"
 import { BorderBox } from "@primer/components"
 import { TreeEntry } from "../../../types"
 
@@ -10,7 +10,7 @@ export type Props = {
   handleClickObject: (path: string) => void
 }
 
-export const FileList: FunctionComponent<Props> = (props) => {
+export function FileList(props: Props): ReactElement {
   const {
     entities,
     currentPath,

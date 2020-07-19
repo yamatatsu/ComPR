@@ -1,4 +1,5 @@
-import React, { FunctionComponent } from "react"
+import React, { ReactElement } from "react"
 
-type Props = {}
-export const NotFound: FunctionComponent<Props> = () => <div>Not Found</div>
+export function NotFound(): ReactElement {
+  return <div>Not Found</div>
+}

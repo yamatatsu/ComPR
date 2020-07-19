@@ -1,10 +1,10 @@
-import React from "react"
+import React, { ReactElement } from "react"
 
 type Props = {
   goToLogin: () => void
 }
 
-export const Page = (props: Props) => {
+export function Page(props: Props): ReactElement {
   const { goToLogin } = props
   return (
     <>

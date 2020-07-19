@@ -1,8 +1,8 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import { useHistory } from "react-router"
 import { Page } from "./Page"
 
-export const LandingPage = () => {
+export function LandingPage(): ReactElement {
   const history = useHistory()
   const goToLogin = () => {
     history.push("/login")
